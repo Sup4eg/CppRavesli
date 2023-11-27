@@ -42,11 +42,50 @@ public:
 };
 
 
+class Lesson62 {
+  //Enum classess
+
+private:
+  enum class Fruits
+  {
+    LEMON,
+    KIWI
+  };
+
+  enum class Colors 
+  {
+    PINK,
+    GRAY
+  };
+
+public:
+  static void checkEnumClassesNotEqual() {
+    Fruits fruit = Fruits::LEMON;
+    Colors color = Colors::PINK;
+
+    //Not working, because different classes;
+    /*if (fruit == color) {
+      
+    }*/
+
+    //awailable
+    if (color == Colors::PINK) {
+      cout << "The color is pink" << endl;
+    } else if (color == Colors::GRAY) {
+      cout << "The color is gray" << endl;
+    }
+
+    //explisit conversion
+    cout << static_cast<int>(color);
+
+  }
+
+};
+
+
 
 
 
 int main() {
-  cout << Lesson59::cStyleConversion(11, 3) << endl;
-  cout << Lesson59::staticCastConversion(11, 3) << endl;
-  Lesson60::pickAndEnterName();
+  Lesson62::checkEnumClassesNotEqual();
 }
