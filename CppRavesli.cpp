@@ -112,6 +112,26 @@ public:
 
 };
 
+class Lesson82 {
+//C-style strings
+public:
+  static void useCStyleStrings() {
+	char mystring[] = "string";
+	cout << mystring << " has " << sizeof(mystring) << " characters.\n";
+	for (int index = 0; index < sizeof(mystring); ++index) {
+	  cout << static_cast<int>(mystring[index]) << " ";
+	}
+	cout << endl;
+
+	char name[10];
+	cout << "Enter your name: ";
+	//cin >> name;
+	cin.getline(name, 10);
+	cout << "You entered: " << name << endl;
+  }
+
+};
+
 class Lesson83 {
   //string_view lesso
 public:
@@ -136,5 +156,5 @@ public:
 };
 
 int main() {
-  Lesson83::useStringView();
+  Lesson82::useCStyleStrings();
 }
