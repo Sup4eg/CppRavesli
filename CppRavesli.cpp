@@ -221,6 +221,41 @@ public:
 
 };
 
+class Lesson87 {
+  //Address arithmetick
+public:
+  static void run() {
+	int array[] = { 7, 8, 2, 4, 5 };
+	cout << "Element 0 is at address: " << &array[0] << endl;
+	cout << "Element 1 is at address: " << &array[1] << endl;
+	cout << "Element 2 is at address: " << &array[2] << endl;
+	cout << "Element 3 is at address: " << &array[3] << endl;
+
+	cout << array[1] << endl;
+	cout << *(array + 1) << endl;
+
+	const int arrayLength = 9;
+	char name[arrayLength] = "Jonathan";
+	int numVowels = 0;
+	for (char* ptr = name; ptr < name + arrayLength; ++ptr) {
+	  switch (*ptr) {
+	  case 'A': 
+	  case 'a':
+	  case 'E':
+	  case 'e':
+	  case 'I':
+	  case 'i':
+	  case 'O':
+	  case 'o':
+	  case 'U':
+	  case 'u':
+		++numVowels;
+	  }
+	}
+	cout << name << " has " << numVowels << " vowels.\n";
+  }
+};
+
 int main() {
-  Lesson86::run();
+  Lesson87::run();
 }
