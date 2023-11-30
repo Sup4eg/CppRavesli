@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <cstddef>
 
 using namespace std;
 
@@ -186,7 +187,40 @@ public:
   }
 };
 
+class Lesson85 {
+  //nullptr lesson
+public:
+  static void checkNullPtrLogic(nullptr_t* ptr) {
+	if (ptr) {
+	  cout << "You passed in " << *ptr << endl;
+	}
+	else {
+	  cout << "You passed in a null pointer" << endl;
+	}
+  }
+
+};
+
+class Lesson86 {
+  //pointers and arrays
+public:
+  static void run() {
+	
+	int array[4] = { 5, 8, 6, 4 };
+	
+	cout << sizeof(array) << endl;
+	
+	int* ptr = array;
+	
+	cout << sizeof(ptr) << endl;
+
+	cout << typeid(&array).name() << endl;
+	cout << typeid(&ptr).name() << endl;
+
+  }
+
+};
 
 int main() {
-  Lesson84::runPointers();
+  Lesson86::run();
 }
