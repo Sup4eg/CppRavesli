@@ -155,6 +155,38 @@ public:
   }
 };
 
+class Lesson84 {
+//Pointers
+public:
+  static void runPointers() {
+	int a = 7;
+	cout << a << endl;
+	cout << &a << endl;
+	cout << *&a << endl;
+
+	int value = 5;
+	int *ptr = &value;
+
+	int x(4);
+	cout << typeid(&x).name() << endl;
+
+	char* chPtr;
+	int* iPtr;
+
+	struct Something {
+	  int nX, nY, nZ;
+	};
+
+	Something* somethingPtr;
+
+	cout << sizeof(chPtr) << endl; //4
+	cout << sizeof(iPtr) << endl; //4
+	cout << sizeof(somethingPtr) << endl; //4
+
+  }
+};
+
+
 int main() {
-  Lesson82::useCStyleStrings();
+  Lesson84::runPointers();
 }
