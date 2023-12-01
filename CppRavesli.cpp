@@ -1,10 +1,22 @@
+/**
+ * @file CppRavesli.cpp
+ *
+ * @brief Cpp lesson from ravesli web site https://ravesli.com/uroki-cpp/
+ *
+ * @author @sup4eg
+ *
+ */
+
+
 #include <iostream>
 #include <string>
 #include <string_view>
 #include <cstddef>
+#include <array>
+#include <algorithm>
+#include <vector>
 
 using namespace std;
-
 
 
 class Lesson59 {
@@ -43,7 +55,6 @@ public:
   }
 
 };
-
 
 class Lesson62 {
   //Enum classess
@@ -114,7 +125,7 @@ public:
 };
 
 class Lesson82 {
-//C-style strings
+  //C-style strings
 public:
   static void useCStyleStrings() {
 	char mystring[] = "string";
@@ -152,12 +163,12 @@ public:
 	str.remove_suffix(2);
 
 	cout << str << endl;
-	
+
   }
 };
 
 class Lesson84 {
-//Pointers
+  //Pointers
 public:
   static void runPointers() {
 	int a = 7;
@@ -166,7 +177,7 @@ public:
 	cout << *&a << endl;
 
 	int value = 5;
-	int *ptr = &value;
+	int* ptr = &value;
 
 	int x(4);
 	cout << typeid(&x).name() << endl;
@@ -205,13 +216,13 @@ class Lesson86 {
   //pointers and arrays
 public:
   static void run() {
-	
+
 	int array[4] = { 5, 8, 6, 4 };
-	
+
 	cout << sizeof(array) << endl;
-	
+
 	int* ptr = array;
-	
+
 	cout << sizeof(ptr) << endl;
 
 	cout << typeid(&array).name() << endl;
@@ -239,7 +250,7 @@ public:
 	int numVowels = 0;
 	for (char* ptr = name; ptr < name + arrayLength; ++ptr) {
 	  switch (*ptr) {
-	  case 'A': 
+	  case 'A':
 	  case 'a':
 	  case 'E':
 	  case 'e':
@@ -256,6 +267,134 @@ public:
   }
 };
 
+class Lesson90 {
+  //dynamic arrays
+public:
+  static void run() {
+
+	int fixedArray[5] = { 9, 7, 5, 3, 1 };
+	int* dynamicArray = new int[5] {9, 7, 5, 3, 1};
+
+	delete[] dynamicArray;
+	dynamicArray = nullptr;
+
+	cout << "Enter a positive integer: ";
+	int length;
+	cin >> length;
+
+	int* array = new int[length];
+	cout << "I just allocated an array of integers of length " << length << '\n';
+
+	array[0] = 7;
+	delete[] array;
+	array = 0;
+  }
+};
+
+class Lesson91 {
+public:
+  static void run() {
+	int value = 7;
+	int& ref = value;
+
+	value = 8;
+	ref = 9;
+
+	cout << value << endl;
+	++ref;
+	cout << value << endl;
+
+	int value1 = 7;
+	int value2 = 8;
+
+	int& reference = value1;
+	reference = value2;
+	cout << value1 << endl;
+
+	int x = 7;
+
+	cout << x << endl;
+	changeN(x);
+
+	cout << x << endl;
+
+  }
+
+  static void changeN(int& ref) {
+	ref = 8;
+  }
+};
+
+class Lesson96 {
+  //void ptr
+public:
+  static void run() {
+	int nResult;
+	float fResult;
+
+	struct Something 
+	{
+	  int n;
+	  float f;
+	};
+
+	Something sResult;
+
+	void* ptr;
+	ptr = &nResult;
+	ptr = &fResult;
+	ptr = &sResult;
+
+	int value = 7;
+	void* voidPtr = &value;
+
+	//cout << *voidPtr << endl; No, it is forbidden!!!
+
+	int* intPtr = static_cast<int*>(voidPtr);
+	//now
+	cout << *intPtr << endl;
+
+  }
+};
+
+class Lesson98 {
+//std::array
+public:
+  static void printLength(const array<double, 4>& myarray) {
+	cout << "length: " << myarray.size() << endl;
+  }
+  static void run() {
+	array<double, 4> myarray = { 8.0, 6.4, 4.3, 1.9 };
+	printLength(myarray);
+	sort(myarray.begin(), myarray.end());
+	//sort(myarray.rbegin(), myarray.rend());
+
+	for (const auto& element : myarray) {
+	  cout << element << " ";
+	}
+	cout << endl;
+  }
+};
+
+class Lesson99 {
+  //std::vector
+public:
+  static void workWithVectors() {
+	vector<int> array1 = { 12, 10, 8, 6, 4, 2, 1 };
+	cout << "The length is: " << array1.size() << endl;
+
+	vector<int> array2 = { 0, 1, 2 };
+	array2.resize(7);
+
+	cout << "The length is: " << array2.size() << endl;
+
+	for (auto const& element : array2) {
+	  cout << element << " ";
+	}
+
+  }
+};
+
 int main() {
-  Lesson87::run();
+  Lesson99::workWithVectors();
 }
