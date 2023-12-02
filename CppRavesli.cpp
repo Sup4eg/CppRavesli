@@ -395,6 +395,118 @@ public:
   }
 };
 
+class Lesson100 {
+//Iterators
+public:
+  static void run() {
+	
+	//iterate using ptrs
+	/*array data{0, 1, 2, 3, 4, 5, 6};
+	auto begin = &data[0];
+	auto end = begin + size(data);
+	for (auto ptr = begin; ptr != end; ++ptr) {
+	  cout << *ptr << " ";
+	}
+	cout << endl;
+	*/
+
+	//iterate using begin, end
+	array arr = { 1, 2, 3 };
+	auto begin = arr.begin();
+	auto end = arr.end();
+
+	for (auto p = begin; p != end; ++p) {
+	  cout << *p << " ";
+	}
+	cout << endl;
+  }
+};
+
+class Lesson101 {
+  //Std Algorithms: find, find_if, count, count_if, sort, for_each
+public:
+  static void checkInput(int &search, int &replace) {
+	while (1)
+	{
+	  if (cin.fail())
+	  {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "You have entered wrong input" << endl;
+		cin >> search >> replace;
+	  }
+	  if (!cin.fail())
+		break;
+	}
+  }
+  static bool containsNut(string_view& str) {
+	return (str.find("nut") != string_view::npos);
+  }
+  static bool greater(int a, int b) {
+	return (a > b);
+  }
+  static void doubleNumber(int& i) {
+	i *= 2;
+  }
+
+  static void runFind() {
+	array<int, 6> arr{ 13, 90, 99, 5, 40, 80 };
+	cout << "Enter a value to search for and replace with: ";
+	int search = 0;
+	int replace = 0;
+	cin >> search >> replace;
+	checkInput(search, replace);
+
+	auto found = find(arr.begin(), arr.end(), search);
+
+	if (found == arr.end()) {
+	  cout << "Could not find " << search << endl;
+	}
+	else {
+	  *found = replace;
+	}
+
+	for (auto const& i : arr) {
+	  cout << i << " ";
+	}
+	cout << endl;
+  }
+  static void runFindIf() {
+	array<string_view, 4> arr = { "apple", "banana", "walnut", "lemon" };
+	auto found = find_if(arr.begin(), arr.end(), containsNut);
+
+	if (found == arr.end()) {
+	  cout << "No nuts\n";
+	}
+	else {
+	  cout << "Found " << *found << endl;
+	}
+  }
+  static void runCountIf() {
+	array<string_view, 5> arr = { "apple", "banana", "walnut", "lemon", "peanut" };
+	auto nuts = count_if(arr.begin(), arr.end(), containsNut);
+	cout << "Counted: " << nuts << " nut(s)\n";
+  }
+  static void runSorting() {
+	array<int, 6> arr = { 13, 90, 99, 5, 40, 80 };
+	sort(arr.begin(), arr.end(), greater);
+
+	for (auto const& i : arr) {
+	  cout << i << " ";
+	}
+	cout << endl;
+  }
+  static void runForEach() {
+	array<int, 4> arr = { 1, 2, 3, 4 };
+	for_each(arr.begin(), arr.end(), doubleNumber);
+	for (auto const& i : arr) {
+	  cout << i << " ";
+	}
+	cout << endl;
+  }
+
+};
+
 int main() {
-  Lesson99::workWithVectors();
+  Lesson101::runForEach();
 }
