@@ -507,6 +507,30 @@ public:
 
 };
 
+class Lesson105 {
+//Using ptr as parameter in a function
+public:
+  static void setToNull(int*& tempPtr) {
+	tempPtr = nullptr;
+  }
+
+  static void runSetToNull() {
+	int six = 6;
+	int* ptr = &six;
+
+	cout << *ptr;
+
+	setToNull(ptr);
+
+	if (ptr) {
+	  cout << *ptr;
+	}
+	else {
+	  cout << " ptr is null";
+	}
+  }
+};
+
 int main() {
-  Lesson101::runForEach();
+  Lesson105::runSetToNull();
 }
