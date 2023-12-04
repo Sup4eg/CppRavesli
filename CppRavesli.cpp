@@ -15,6 +15,9 @@
 #include <array>
 #include <algorithm>
 #include <vector>
+#include <math.h>
+#include <stdlib.h>
+#include <functional>
 
 using namespace std;
 
@@ -531,6 +534,140 @@ public:
   }
 };
 
+class Lesson110 {
+  //Function ptr
+public:
+  static int boo(int a) {
+	return 7;
+  }
+  static int doo(int b) {
+	return 8;
+  }
+  static void runFuncPtrChecking() {
+	int (*fcnPtr)(int) = boo;
+	fcnPtr = doo;
+
+	(*fcnPtr)(7);
+	fcnPtr(10);
+  }
+  static bool ascending(int a, int b) {
+	return a > b;
+  }
+  static bool descending(int a, int b) {
+	return a < b;
+  }
+  static void printArray(int* array, int size) {
+	for (int index = 0; index < size; ++index) {
+	  cout << array[index] << " ";
+	}
+	cout << '\n';
+  }
+  static bool evensFirst(int a, int b) {
+	if (!(a & 1) && (b & 1)) {
+	  return false;
+	}
+
+	if ((a & 1) && !(b & 1)) {
+	  return true;
+	}
+
+	return ascending(a, b);
+  }
+  static bool validate(int a, int b, function<bool(int, int)>  fcn) {
+	return true;
+  }
+  static void selectionSort(int* array, int size, bool (*comparisonFunc)(int, int) = ascending) {
+	for (int startIndex = 0; startIndex < size; ++startIndex) {
+	  int smallestIndex = startIndex;
+	  for (int currentIndex = startIndex + 1; currentIndex < size; ++currentIndex) {
+		if (comparisonFunc(array[smallestIndex], array[currentIndex])) {
+		  smallestIndex = currentIndex;
+		}
+	  }
+	  swap(array[startIndex], array[smallestIndex]);
+	}
+  }
+  static void runSelectionSort() {
+	
+	constexpr int ARRAY_LENGTH = 8;
+	
+	int array[ARRAY_LENGTH] = { 4, 8, 5, 6, 2, 3, 1, 7 };
+
+	selectionSort(array, ARRAY_LENGTH, evensFirst);
+	
+	printArray(array, ARRAY_LENGTH);
+
+	//selectionSort(array, ARRAY_LENGTH, ascending);
+	//printArray(array, 8);
+  }
+
+};
+
+class Lesson112 {
+  //Vector capacity
+public:
+  static void printStack(const vector<int> &stack) {
+	for (const auto& element : stack) {
+	  cout << element << " ";
+	}
+	cout << "(cap " << stack.capacity() << " length " << stack.size() << " )\n";
+  }
+  static void run() {
+	vector<int> array = { 0, 1, 2, 3 };
+	array.resize(6);
+
+	cout << "The length is: " << array.size() << endl;
+	cout << "The capacity is: " << array.capacity() << endl;
+
+	vector<int> array2 = { 0, 1, 2, 3, 4, 5 };
+	cout << "length: " << array2.size() << " capacity: " << array2.capacity() << endl;
+
+	array2 = { 8, 7, 6, 5 };
+	cout << "length: " << array2.size() << " capacity: " << array2.capacity() << endl;
+
+	for (auto const& el : array2) {
+	  cout << el << " ";
+	}
+	cout << endl;
+
+	vector<int> stack;
+
+	stack.reserve(7);
+
+	printStack(stack);
+	stack.push_back(7); //add to stack
+	printStack(stack);
+
+	stack.push_back(4);
+	printStack(stack);
+
+	stack.push_back(1);
+	printStack(stack);
+
+	cout << "top: " << stack.back() << "\n";
+
+
+	cout << "size of stack: " << sizeof(stack) << endl;
+
+	stack.pop_back(); //delete first element on stack
+	printStack(stack);
+
+	stack.pop_back();
+	printStack(stack);
+
+	stack.pop_back();
+	printStack(stack);
+
+	cout << "size of stack: " << sizeof(stack) << endl << endl;
+
+	vector<int> vect = { 0, 1, 2, 3, 4, 5 };
+	cout << "size: " << vect.size() << " cap: " << vect.capacity() << endl;
+	vect.push_back(6);
+	cout << "size: " << vect.size() << " cap: " << vect.capacity() << endl;
+  }
+
+};
+
 int main() {
-  Lesson105::runSetToNull();
+  Lesson112::run();
 }
