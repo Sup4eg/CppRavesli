@@ -18,6 +18,8 @@
 #include <math.h>
 #include <stdlib.h>
 #include <functional>
+#include <cassert>
+#include <cstdarg>
 
 using namespace std;
 
@@ -335,7 +337,7 @@ public:
 	int nResult;
 	float fResult;
 
-	struct Something 
+	struct Something
 	{
 	  int n;
 	  float f;
@@ -361,7 +363,7 @@ public:
 };
 
 class Lesson98 {
-//std::array
+  //std::array
 public:
   static void printLength(const array<double, 4>& myarray) {
 	cout << "length: " << myarray.size() << endl;
@@ -399,10 +401,10 @@ public:
 };
 
 class Lesson100 {
-//Iterators
+  //Iterators
 public:
   static void run() {
-	
+
 	//iterate using ptrs
 	/*array data{0, 1, 2, 3, 4, 5, 6};
 	auto begin = &data[0];
@@ -428,7 +430,7 @@ public:
 class Lesson101 {
   //Std Algorithms: find, find_if, count, count_if, sort, for_each
 public:
-  static void checkInput(int &search, int &replace) {
+  static void checkInput(int& search, int& replace) {
 	while (1)
 	{
 	  if (cin.fail())
@@ -511,7 +513,7 @@ public:
 };
 
 class Lesson105 {
-//Using ptr as parameter in a function
+  //Using ptr as parameter in a function
 public:
   static void setToNull(int*& tempPtr) {
 	tempPtr = nullptr;
@@ -588,13 +590,13 @@ public:
 	}
   }
   static void runSelectionSort() {
-	
+
 	constexpr int ARRAY_LENGTH = 8;
-	
+
 	int array[ARRAY_LENGTH] = { 4, 8, 5, 6, 2, 3, 1, 7 };
 
 	selectionSort(array, ARRAY_LENGTH, evensFirst);
-	
+
 	printArray(array, ARRAY_LENGTH);
 
 	//selectionSort(array, ARRAY_LENGTH, ascending);
@@ -606,7 +608,7 @@ public:
 class Lesson112 {
   //Vector capacity
 public:
-  static void printStack(const vector<int> &stack) {
+  static void printStack(const vector<int>& stack) {
 	for (const auto& element : stack) {
 	  cout << element << " ";
 	}
@@ -668,6 +670,243 @@ public:
 
 };
 
+class Lesson113 {
+  //Recursion
+public:
+
+  //Fibonacce
+  static int fibonacce(int number) {
+	if (number == 0 || number == 1) {
+	  return number;
+	}
+	return fibonacce(number - 1) + fibonacce(number - 2);
+  }
+
+  //Factorial
+  static int factorial(int number) {
+	if (number == 1) {
+	  return number;
+	}
+	return factorial(number - 1) * number;
+  }
+
+  //Sum numbers
+  static int sumNumbers(int number) {
+	if (!(number / 10)) {
+	  return number;
+	}
+	return (number % 10) + sumNumbers(number / 10);
+  }
+
+  static void run() {
+	cout << sumNumbers(83569) << endl;;
+  }
+
+};
+
+class Lesson114 {
+  //cerr, exit()
+public:
+  static int getArrayValue(const vector<int>& vect, int index) {
+	if (index < 0 || index >= vect.size()) {
+	  exit(2);
+	}
+	return vect.at(index);
+  }
+
+  static int getArrayValueWithAssert(const array<int, 10>& array, int index) {
+	assert(index >= 0 && index <= 8);
+	return array[index];
+  }
+
+  static void printString(const char* cstring) {
+	if (cstring) {
+	  cout << cstring;
+	}
+	else {
+	  cerr << "function printString() received a null parameter";
+	}
+  }
+};
+
+class Lesson117 {
+  //Ellipsis
+public:
+  static double findAverage(int count, ...) {
+	double sum = 0;
+
+	//Ellipsis access
+	va_list list;
+
+	//count - last parameter which is not ellipsis
+	va_start(list, count);
+
+	for (int arg = 0; arg < count; ++arg) {
+	  //use va_arg to get parameters from ellipsis
+	  sum += va_arg(list, int);
+	}
+	va_end(list);
+	return sum / count;
+  }
+};
+
+class Lesson118 {
+  //lambda
+public:
+
+  static void repeat(int repetitions, const function<void(int)>& fn) {
+	for (int i = 0; i < repetitions; ++i) {
+	  fn(i);
+	}
+  }
+
+  static void run() {
+	array<string_view, 4> arr{ "apple", "banana", "walnut", "lemon" };
+	auto found{ find_if(arr.begin(), arr.end(), [](string_view str) {return (str.find("nut") != string_view::npos); }) };
+	if (found == arr.end()) {
+	  cout << "No nuts\n";
+	}
+	else {
+	  cout << "Found " << *found << endl;
+	}
+
+	double (*addNumbers1)(double, double) = [](double a, double b) { return (a + b); };
+	cout << addNumbers1(1, 2) << endl;
+
+	function addNumbers2 = [](double a, double b) { return (a + b); };
+	cout << addNumbers2(3, 4) << endl;
+
+	auto addNumbers3 = [](double a, double b) { return (a + b); };
+	cout << addNumbers3(5, 6) << endl;
+
+	repeat(3, [](int i) {cout << i << "\n"; });
+  }
+};
+
+class Lesson119 {
+  //Lambda capture clause
+public:
+
+  struct Car {
+	string make{};
+	string model{};
+  };
+
+  static void run() {
+	array arr = { "apple", "banana", "walnut", "lemon" };
+	cout << "search for: ";
+	string search = "";
+	cin >> search;
+
+
+	auto found = find_if(arr.begin(), arr.end(), [search](string_view str) {return (str.find(search) != string_view::npos); });
+
+	if (found == arr.end()) {
+	  cout << "Not found\n";
+	}
+	else {
+	  cout << "Found " << *found << endl;
+	}
+
+	int ammo = 10;
+	auto shoot = [&ammo]() mutable {
+	  --ammo;
+	  cout << "Pew! " << ammo << " shot(s) left.\n";
+	  };
+
+	shoot();
+	shoot();
+
+	cout << ammo << " shot(s) left\n";
+  }
+
+  static void sortCars() {
+	array<Car, 3> cars{ { {"Volkswaggen", "Golf"}, {"Toyota", "Corolla"}, {"Honda", "Civic"} } };
+	int comparisons = 0;
+	
+	sort(cars.begin(), cars.end(), [&comparisons](const auto & a, const auto & b) {
+	  ++comparisons;
+	  return (a.make < b.make);
+	  });
+
+	for (const auto& car : cars) {
+	  cout << car.make << " " << car.model << endl;
+	}
+  }
+
+  static void invoke(const function<void(void)> &fn) {
+	fn();
+  }
+
+  static void checkLambdaCopies() {
+	int i = 0;
+	auto count = [i]() mutable { cout << ++i << endl; };
+  
+	auto otherCount = ref(count);
+
+	count();
+	otherCount();
+
+	//2
+	invoke(ref(count));
+	//2
+	invoke(ref(count));
+	//2
+	invoke(ref(count));
+
+  }
+};
+
+class Lesson125 {
+  //Class list initialization
+public:
+  class Values {
+	private:
+	  int m_value1;
+	  double m_value2;
+	  char m_value3;
+  public:
+	Values(int value1, double value2, char value3 = 'd') : m_value1(value1), m_value2(value2), m_value3(value3) {}
+
+	void print() {
+	  cout << "Values(" << m_value1 << ", " << m_value2 << ", " << m_value3 << ")\n";
+	}
+  };
+};
+
+class Lesson128 {
+  //Destructors
+public:
+  class Massiv
+  {
+  private:
+	int* m_array;
+	int m_length;
+  public:
+	Massiv(int length) {
+	  assert(length > 0);
+	  m_array = new int[length];
+	  m_length = length;
+	}
+
+	//Desctructor
+	~Massiv() {
+	  cout << "Run destructor here" << endl;
+	  delete[] m_array;
+	  m_array = nullptr;
+	}
+
+	void setValue(int index, int value) { m_array[index] = value; }
+	int getValue(int index) { return m_array[index]; }
+	int getLength() { return m_length; };
+  };
+  
+};
+
 int main() {
-  Lesson112::run();
+  Lesson128::Massiv arr(15);
+  for (int count = 0; count < 15; ++count) {
+	arr.setValue(count, count + 1);
+  }
+  cout << "The value of element 7 is " << arr.getValue(7) << endl;
 }
