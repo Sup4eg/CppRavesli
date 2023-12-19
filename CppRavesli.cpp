@@ -823,8 +823,8 @@ public:
   static void sortCars() {
 	array<Car, 3> cars{ { {"Volkswaggen", "Golf"}, {"Toyota", "Corolla"}, {"Honda", "Civic"} } };
 	int comparisons = 0;
-	
-	sort(cars.begin(), cars.end(), [&comparisons](const auto & a, const auto & b) {
+
+	sort(cars.begin(), cars.end(), [&comparisons](const auto& a, const auto& b) {
 	  ++comparisons;
 	  return (a.make < b.make);
 	  });
@@ -834,14 +834,14 @@ public:
 	}
   }
 
-  static void invoke(const function<void(void)> &fn) {
+  static void invoke(const function<void(void)>& fn) {
 	fn();
   }
 
   static void checkLambdaCopies() {
 	int i = 0;
 	auto count = [i]() mutable { cout << ++i << endl; };
-  
+
 	auto otherCount = ref(count);
 
 	count();
@@ -861,10 +861,10 @@ class Lesson125 {
   //Class list initialization
 public:
   class Values {
-	private:
-	  int m_value1;
-	  double m_value2;
-	  char m_value3;
+  private:
+	int m_value1;
+	double m_value2;
+	char m_value3;
   public:
 	Values(int value1, double value2, char value3 = 'd') : m_value1(value1), m_value2(value2), m_value3(value3) {}
 
@@ -875,7 +875,7 @@ public:
 };
 
 class Lesson128 {
-  //Destructors
+  //Destructor
 public:
   class Massiv
   {
@@ -889,7 +889,7 @@ public:
 	  m_length = length;
 	}
 
-	//Desctructor
+	//Destructor
 	~Massiv() {
 	  cout << "Run destructor here" << endl;
 	  delete[] m_array;
@@ -900,13 +900,142 @@ public:
 	int getValue(int index) { return m_array[index]; }
 	int getLength() { return m_length; };
   };
-  
+
 };
 
-int main() {
-  Lesson128::Massiv arr(15);
-  for (int count = 0; count < 15; ++count) {
-	arr.setValue(count, count + 1);
+class Lesson129 {
+  //this lesson
+public:
+  class Mathem {
+  private:
+	int m_value;
+  public:
+	Mathem() : m_value(0) {}
+
+	Mathem& add(int value)
+	{
+	  m_value += value;
+	  return *this;
+	}
+
+	Mathem& sub(int value) {
+	  m_value -= value;
+	  return *this;
+	}
+
+	Mathem& multiply(int value) {
+	  m_value *= value;
+	  return *this;
+	}
+
+	int getValue() {
+	  return m_value;
+	}
+
+  };
+};
+
+class Lesson134 {
+  //friend functions and classes
+
+public:
+  class Anything {
+  private:
+	int m_value;
+  public:
+	Anything() {
+	  m_value = 0;
+	}
+	void add(int value) { m_value += value; }
+
+	//friend function
+	friend void reset(Anything& Anything);
+  };
+};
+
+class Lesson139 {
+public:
+  class Dollars {
+  private:
+	int m_dollars;
+  public:
+	Dollars(int dollars) {
+	  m_dollars = dollars;
+	}
+
+	//Dollars + int
+	friend Dollars operator+(const Dollars &d1, int value);
+
+	//int + Dollars
+	friend Dollars operator+(int value, const Dollars& d1);
+
+	int getDollars() {
+	  return m_dollars;
+	}
+  };
+};
+
+
+class Values;
+
+//for lesson 134
+class Display {
+private:
+  bool m_displayIntFirst;
+public:
+  Display(bool displayIntFirst) {
+	m_displayIntFirst = displayIntFirst;
   }
-  cout << "The value of element 7 is " << arr.getValue(7) << endl;
+  void displayItem(Values& value);
+};
+
+//for lesson 134
+class Values {
+private:
+  int m_intValue;
+  double m_dValue;
+public:
+
+  Values(int intValue, double dValue) {
+	m_intValue = intValue;
+	m_dValue = dValue;
+  }
+
+  //friend class Display for class Values
+  friend void Display::displayItem(Values& value);
+};
+
+void reset(Lesson134::Anything& anything) {
+  anything.m_value = 0;
+}
+
+//for lesson 139
+Lesson139::Dollars operator+(const Lesson139::Dollars& d1, int value)
+{
+  return Lesson139::Dollars(d1.m_dollars + value);
+}
+
+Lesson139::Dollars operator+(int value, const Lesson139::Dollars& d1)
+{
+  return Lesson139::Dollars(d1.m_dollars + value);
+}
+
+void Display::displayItem(Values& value) {
+  if (m_displayIntFirst) {
+	cout << value.m_intValue << " " << value.m_dValue << "\n";
+  }
+  else {
+	cout << value.m_dValue << " " << value.m_intValue << "\n";
+  }
+}
+
+
+int main() {
+  Lesson139::Dollars d1 = Lesson139::Dollars(5) + 5;
+  Lesson139::Dollars d2 = 5 + Lesson139::Dollars(5);
+
+  cout << "I have " << d1.getDollars() << " dollars. " << endl;
+  cout << "I have " << d2.getDollars() << " dollars. " << endl;
+
+  return 0;
 }
