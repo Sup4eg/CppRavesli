@@ -20,6 +20,7 @@
 #include <functional>
 #include <cassert>
 #include <cstdarg>
+#include <initializer_list>
 
 using namespace std;
 
@@ -964,7 +965,7 @@ public:
 	}
 
 	//Dollars + int
-	friend Dollars operator+(const Dollars &d1, int value);
+	friend Dollars operator+(const Dollars& d1, int value);
 
 	//int + Dollars
 	friend Dollars operator+(int value, const Dollars& d1);
@@ -974,6 +975,63 @@ public:
 	}
   };
 };
+
+class Lesson145 {
+
+public:
+  class Number {
+
+  private:
+	int m_number;
+  public:
+	Number(int number = 0) : m_number(number) {}
+
+	Number& operator++();
+	Number& operator--();
+	Number operator++(int);
+	Number operator--(int);
+
+	friend ostream& operator<<(ostream& out, const Number& n);
+  };
+
+};
+
+Lesson145::Number& Lesson145::Number::operator++() {
+  if (m_number == 0) {
+	m_number = 0;
+  }
+  else {
+	++m_number;
+  }
+  return *this;
+}
+
+Lesson145::Number& Lesson145::Number::operator--() {
+  if (m_number == 0) {
+	m_number = 0;
+  }
+  else {
+	--m_number;
+  }
+  return *this;
+}
+
+Lesson145::Number Lesson145::Number::operator++(int) {
+  Number temp(m_number);
+  ++(*this);
+  return temp;
+}
+
+Lesson145::Number Lesson145::Number::operator--(int) {
+  Number temp(m_number);
+  --(*this);
+  return temp;
+}
+
+ostream& operator<<(ostream& out, const Lesson145::Number& n) {
+  out << n.m_number;
+  return out;
+}
 
 
 class Values;
@@ -1030,12 +1088,130 @@ void Display::displayItem(Values& value) {
 }
 
 
+class Lesson146 {
+public:
+  class IntArray {
+  private:
+	int m_array[10];
+  public:
+	int& operator[] (const int index) {
+	  assert(index >= 0 && index < 10);
+	  return m_array[index];
+	}
+	const int& operator[] (const int index) const {
+	  assert(index >= 0 && index < 10);
+	  return m_array[index];
+	}
+  };
+
+};
+
+class Lesson149 {
+public:
+  class Drob {
+  private:
+	int m_numerator;
+	int m_denominator;
+  public:
+	//default constructor
+	Drob(int numerator = 0, int denominator = 1) : m_numerator(numerator), m_denominator(denominator) {
+	  assert(denominator != 0);
+	}
+
+	Drob(const Drob& drob) : m_numerator(drob.m_numerator), m_denominator(drob.m_denominator) {
+	  cout << "Copy constructor worked here" << endl;
+	}
+
+	friend ostream& operator<<(ostream& out, const Drob& d1) {
+	  out << d1.m_numerator << "/" << d1.m_denominator;
+	  return out;
+	}
+  };
+};
+
+class Lesson151 {
+public:
+  class SomeString {
+  private:
+	string m_string;
+  public:
+	SomeString(char) = delete; //usage of this statement is error
+
+	explicit SomeString(int a) {
+	  m_string.resize(a);
+	}
+
+	SomeString(const char* string) {
+	  m_string = string;
+	}
+
+	friend ostream& operator<<(ostream& out, const SomeString& s) {
+	  out << s.m_string;
+	  return out;
+	}
+  };
+};
+
+class Lesson152 {
+public:
+  class Drob {
+  private:
+	int m_numerator;
+	int m_denominator;
+
+  public:
+	Drob(int numerator = 0, int denominator = 1) : m_numerator(numerator), m_denominator(denominator) {
+	  assert(denominator != 0);
+	}
+
+	Drob(const Drob& drob) = delete;
+	Drob& operator=(const Drob& drob) = delete;
+
+	friend ostream& operator<<(ostream& out, const Drob& d1) {
+	  out << d1.m_numerator << "/" << d1.m_denominator;
+	  return out;
+	}
+  };
+};
+
+class Lesson160 {
+public:
+  class ArrayInt {
+  private:
+	int m_length;
+	int* m_data;
+
+  public:
+	ArrayInt() : m_length(0), m_data(nullptr) {}
+	ArrayInt(int length) : m_length(length) {
+	  m_data = new int[length];
+	}
+	ArrayInt(const initializer_list<int>& list) : ArrayInt((int)list.size()) {
+	  int count = 0;
+	  for (auto& element : list) {
+		m_data[count] = element;
+		++count;
+	  }
+	}
+	~ArrayInt() {
+	  delete[] m_data;
+	}
+
+	int& operator[](int index) {
+	  assert(index >= 0 && index < m_length);
+	  return m_data[index];
+	}
+
+	int getLength() {
+	  return m_length;
+	}
+  };
+};
+
+
 int main() {
-  Lesson139::Dollars d1 = Lesson139::Dollars(5) + 5;
-  Lesson139::Dollars d2 = 5 + Lesson139::Dollars(5);
-
-  cout << "I have " << d1.getDollars() << " dollars. " << endl;
-  cout << "I have " << d2.getDollars() << " dollars. " << endl;
-
-  return 0;
+  Lesson160::ArrayInt array{ 7, 6, 5, 4, 3, 2, 1 };
+  for (int count = 0; count < array.getLength(); ++count) {
+	cout << array[count] << ' ';
+  }
 }
