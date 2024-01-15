@@ -1208,10 +1208,201 @@ public:
   };
 };
 
+class Lesson164 {
+public:
+  class Parent {
+  private:
+	int m_id;
+  public:
+	Parent(int id = 0) : m_id(id) {
+	}
+	int getId() const { return m_id; }
+  };
+
+  class Child : public Parent
+  {
+  private:
+	double m_value;
+  public:
+	Child(double value = 0.0, int id = 0) : Parent(id), m_value(value) {}
+	double getValue() const { return m_value; }
+  };
+};
+
+class Lesson168 {
+public:
+  class Parent {
+  private:
+	int m_value;
+  public:
+	Parent(int value) : m_value(value) {}
+
+  protected:
+	void printValue() {
+	  cout << m_value;
+	}
+  };
+
+  class Child : public Parent {
+
+  public:
+	Child(int value) : Parent(value) {};
+	using Parent::printValue;
+  };
+};
+
+class Lesson170 {
+public:
+  class Parent {
+  protected:
+	int m_value;
+  public:
+	Parent(int value) : m_value(value) {}
+	const char* getName() const { return "Parent"; }
+	int getValue() const { return m_value; }
+  };
+
+  class Child : public Parent {
+  public:
+	Child(int value) : Parent(value) {}
+	const char* getName() const { return "Child"; }
+	int getValueDoubled() const { return m_value * 2; }
+  };
+};
+
+class Lesson171 {
+public:
+  class Parent {
+  public:
+	virtual const char* getName() const { return "Parent"; }
+  };
+
+  class Child : public Parent {
+  public:
+	virtual const char* getName() const { return "Child"; }
+  };
+};
+
+class Lesson172 {
+public:
+  class Parent {
+  public:
+	virtual Parent* getThis() {
+	  cout << "Called Parent::getThis()\n";
+	  return this;
+	}
+
+	void printType() {
+	  cout << "returned a Parent\n";
+	}
+  };
+
+  class Child : public Parent {
+  public:
+	virtual Child* getThis() override {
+	  cout << "called Child::getThis()\n";
+	  return this;
+	}
+	void printType() {
+	  cout << "returned a Child\n";
+	}
+  };
+};
+
+class Lesson173 {
+public:
+  class Parent {
+  public:
+	virtual ~Parent() {
+	  cout << "Calling ~Parent()" << endl;
+	}
+  };
+
+  class Child : public Parent {
+  private:
+	int* m_array;
+  public:
+	Child(int length) {
+	  m_array = new int[length];
+	}
+
+	virtual ~Child() {
+	  cout << "Calling ~Child()" << endl;
+	  delete[] m_array;
+	}
+  };
+};
+
+class Lesson177 {
+public:
+  class PoweredDevice {
+  public:
+	PoweredDevice(int power) {
+	  cout << "Powered device: " << power << endl;
+	}
+  };
+
+  class Scanner : virtual public PoweredDevice {
+  public:
+	Scanner(int scanner, int power) : PoweredDevice(power) {
+	  cout << "Scanner: " << scanner << endl;
+	}
+  };
+
+  class Printer : virtual public PoweredDevice {
+  public:
+	Printer(int printer, int power) : PoweredDevice(power){
+	  cout << "Printer: " << printer << endl;
+	}
+  };
+
+  class Copier : public Scanner, public Printer {
+  public:
+	Copier(int scanner, int printer, int power) : Scanner(scanner, power), Printer(printer, power), PoweredDevice(power) {}
+  };
+
+};
+
+class Lesson180 {
+public:
+  class Parent {
+  public:
+	
+	Parent() {}
+
+	friend ostream& operator<<(ostream& out, const Parent& p) {
+	  return p.print(out);
+	}
+
+	virtual ostream& print(ostream& out) const { 
+	  out << "Parent"; 
+	  return out;
+	}
+  };
+
+  class Child : public Parent {
+  public:
+	Child() {}
+	virtual ostream& print(ostream& out) const override { 
+	  out << "Child"; 
+	  return out;
+	}
+  };
+
+};
+
 
 int main() {
-  Lesson160::ArrayInt array{ 7, 6, 5, 4, 3, 2, 1 };
-  for (int count = 0; count < array.getLength(); ++count) {
-	cout << array[count] << ' ';
-  }
+
+  Lesson180::Parent p;
+  cout << p << endl;
+
+  Lesson180::Child ch;
+  cout << ch << endl;
+
+  Lesson180::Parent& pref = ch;
+  cout << pref << endl;
+
+  return 0;
+
 }
