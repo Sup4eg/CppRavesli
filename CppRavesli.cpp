@@ -1366,6 +1366,7 @@ public:
 class Lesson180 {
 public:
   class Parent {
+  
   public:
 	
 	Parent() {}
@@ -1391,18 +1392,129 @@ public:
 
 };
 
+class Lesson181 {
+public:
+  template <typename T>
+  static const T& max(const T& a, const T& b) {
+	return (a > b) ? a : b;
+  }
+};
+
+class Lesson184 {
+public:
+  template <class T, int size>
+  class StaticArray {
+  private:
+	T mArray[size];
+  public:
+	T* getArray();
+
+	T& operator[] (int index){
+	  return mArray[index];
+	}
+  };
+
+};
+
+template <class T, int size>
+T* Lesson184::StaticArray<T, size>::getArray() {
+  return mArray;
+}
+
+class Lesson186 {
+public:
+  template <class T>
+  class Repository8 {
+  private:
+	T mArray[8];
+  public:
+	void set(int index, const T& value) {
+	  mArray[index] = value;
+	}
+
+	const T& get(int index) {
+	  return mArray[index];
+	}
+  };
+
+  template<>
+  class Repository8<bool> {
+  private:
+	unsigned char mData;
+  public:
+	Repository8() : mData(0) {
+	}
+
+	void set(int index, bool value) {
+	  if (value) {
+		mData |= 1 << index;
+	  }
+	  else {
+		mData &= ~(1 << index);
+	  }
+	}
+
+	bool get(int index) {
+	  return (mData & 1 << index) != 0;
+	}
+  };
+};
+
+class Lesson187 {
+
+public:
+  template <class T, int size>
+  class StaticArrayBase {
+  protected:
+	T mArray[size] {};
+
+  public:
+
+	T* getArray() { return mArray; }
+	
+	T& operator[](int index) {
+	  return mArray[index];
+	}
+
+	virtual void print() {
+	  for (int i = 0; i < size; ++i) {
+		cout << mArray[i] << " ";
+	  }
+	  cout << endl;
+	}
+  };
+
+  template <class T, int size>
+  class StaticArray : public StaticArrayBase<T, size> {};
+
+  template <int size>
+  class StaticArray <double, size> : public StaticArrayBase<double, size>
+  {
+  public:
+	virtual void print() override {
+	  for (int i = 0; i < size; ++i) {
+		cout << scientific << this->mArray[i] << " ";
+	  }
+	  cout << endl;
+	}
+  };
+
+};
+
 
 int main() {
 
-  Lesson180::Parent p;
-  cout << p << endl;
-
-  Lesson180::Child ch;
-  cout << ch << endl;
-
-  Lesson180::Parent& pref = ch;
-  cout << pref << endl;
-
+  Lesson187::StaticArray<int, 5> intArray;
+  for (int count = 0; count < 5; ++count) {
+	intArray[count] = count;
+  }
+  intArray.print();
+  
+  Lesson187::StaticArray<double, 4> doubleArray;
+  for (int count = 0; count < 4; ++count) {
+	doubleArray[count] = (4 + 0.1 * count);
+  }
+  doubleArray.print();
   return 0;
 
 }
