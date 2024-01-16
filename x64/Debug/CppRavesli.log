@@ -1,3 +1,2 @@
 ﻿  CppRavesli.cpp
-C:\mine\projects\CppRavesli\CppRavesli.cpp(1496,25): error C2065: 'mArray': undeclared identifier
-C:\mine\projects\CppRavesli\CppRavesli.cpp(1496,25): error C3861: 'mArray': identifier not found
+  CppRavesli.vcxproj -> C:\mine\projects\CppRavesli\x64\Debug\CppRavesli.exe

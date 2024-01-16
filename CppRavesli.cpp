@@ -21,6 +21,7 @@
 #include <cassert>
 #include <cstdarg>
 #include <initializer_list>
+#include <cmath>
 
 using namespace std;
 
@@ -1501,20 +1502,70 @@ public:
 
 };
 
+class Lesson192 {
+public:
+  static double mySqrt(double a) {
+	if (a < 0.0) {
+	  throw "Can not take sqrt to negative number";
+	}
+	return sqrt(a);
+  }
+};
+
+class Lesson193 {
+public:
+  class ArrayException : public exception {
+  private:
+	string mError;
+  public:
+	ArrayException(string error) : mError(error) {}
+	virtual const char* what() const noexcept override {
+	  return mError.c_str();
+	}
+  };
+
+  class ArrayInt {
+  private:
+	int mData[4]{ 0 };
+  public:
+	int getLength() { return 4; }
+
+	int& operator[](const int index) {
+	  if (index < 0 || index >= getLength()) {
+		throw ArrayException("Invalid index");
+	  }
+	  return mData[index];
+	}
+  };
+
+  class Parent {
+  public:
+	Parent() {}
+  };
+
+  class Child : public Parent {
+  public:
+	Child() {}
+  };
+};
+
 
 int main() {
 
-  Lesson187::StaticArray<int, 5> intArray;
-  for (int count = 0; count < 5; ++count) {
-	intArray[count] = count;
+  Lesson193::ArrayInt array;
+
+  try
+  {
+	int value = array[7];
   }
-  intArray.print();
-  
-  Lesson187::StaticArray<double, 4> doubleArray;
-  for (int count = 0; count < 4; ++count) {
-	doubleArray[count] = (4 + 0.1 * count);
+  catch (Lesson193::ArrayException& ex)
+  {
+	cerr << "An array exception occured (" << ex.what() << ")" << endl;
   }
-  doubleArray.print();
+  catch (exception& ex) {
+	cerr << "Some other std::exception occured (" << ex.what() << ")" << endl;
+  }
+
   return 0;
 
 }
