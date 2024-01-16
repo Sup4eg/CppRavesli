@@ -1549,23 +1549,41 @@ public:
   };
 };
 
+class Lesson195 {
+public:
+  class A {
+  private:
+	int mX;
+  public:
+	A(int x) : mX(x) {
+	  if (x <= 0) {
+		throw 1;
+	  }
+	}
+  };
+
+  class B : public A {
+  public:
+	B(int x) try : A(x) {
+	  
+	}
+	catch (...) {
+	  cerr << "Construction of A failed\n" << endl;
+	}
+  };
+};
+
 
 int main() {
 
-  Lesson193::ArrayInt array;
-
   try
   {
-	int value = array[7];
+	Lesson195::B b(0);
   }
-  catch (Lesson193::ArrayException& ex)
+  catch (int)
   {
-	cerr << "An array exception occured (" << ex.what() << ")" << endl;
+	cout << "Oooops!" << endl;
   }
-  catch (exception& ex) {
-	cerr << "Some other std::exception occured (" << ex.what() << ")" << endl;
-  }
-
   return 0;
 
 }
