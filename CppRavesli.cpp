@@ -22,6 +22,7 @@
 #include <cstdarg>
 #include <initializer_list>
 #include <cmath>
+#include <memory>
 
 using namespace std;
 
@@ -1573,17 +1574,171 @@ public:
   };
 };
 
+class Lesson197 {
+public:
+  template<class T>
+  class AutoPtr1 {
+	T* mPtr;
+  public:
+	AutoPtr1(T* ptr=nullptr) : mPtr(ptr) {}
+	~AutoPtr1()
+	{
+	  delete mPtr;
+	}
+	T& operator*() const { return *mPtr; }
+	T* operator->() const { return mPtr; }
+  };
+
+  template<class T>
+  class AutoPtr2 {
+	T* mPtr;
+  public:
+	AutoPtr2(T* ptr = nullptr) : mPtr(ptr) {}
+
+	~AutoPtr2()
+	{
+	  delete mPtr;
+	}
+
+	AutoPtr2(AutoPtr2& a) {
+	  mPtr = a.mPtr;
+	  a.mPtr = nullptr;
+	}
+
+	AutoPtr2& operator=(AutoPtr2& a) {
+	  if (&a == this) {
+		return *this;
+	  }
+	  delete mPtr;
+	  mPtr = a.mPtr;
+	  a.mPtr = nullptr;
+	  return *this;
+	}
+
+	T& operator*() const { return *mPtr; }
+	T* operator->() const { return mPtr; }
+	bool isNull() const { return mPtr == nullptr; }
+
+  };
+
+  class Item {
+  public:
+
+	int i = 0;
+
+	Item() { 
+	  cout << "Item acquired" << endl;
+	}
+
+	~Item()
+	{
+	  cout << "Item destroyed" << endl;
+	}
+  };
+};
+
+class Lesson199 {
+public:
+  template<class T>
+  class AutoPtr3 {
+	T* mPtr;
+  public:
+	AutoPtr3(T* ptr = nullptr) : mPtr(ptr){}
+	~AutoPtr3() {
+	  delete mPtr;
+	}
+
+	AutoPtr3(const AutoPtr3& x) {
+	  mPtr = new T;
+	  *mPtr = *x.mPtr;
+	}
+
+	AutoPtr3(AutoPtr3&& x) noexcept : mPtr(x.mPtr)  {
+	  x.mPtr = nullptr;
+	}
+
+	AutoPtr3& operator=(const AutoPtr3& x) {
+	  if (&x == this) {
+		return *this;
+	  }
+	  delete mPtr;
+	  mPtr = new T;
+	  *mPtr = *x.mPtr;
+	  return *this;
+	}
+
+	AutoPtr3& operator=(AutoPtr3&& x) noexcept {
+	  if (&x == this) {
+		return *this;
+	  }
+	  delete mPtr;
+	  mPtr = x.mPtr;
+	  x.mPtr = nullptr;
+	  return *this;
+	}
+
+	T& operator*() { return *mPtr; }
+	T* operator->() { return mPtr; }
+	bool isNull() const { return mPtr == nullptr; }
+
+  };
+
+  class Item {
+  public:
+	Item() {
+	  cout << "Item acquired" << endl;
+	}
+	~Item() {
+	  cout << "Item destroyed" << endl;
+	}
+  };
+
+  static AutoPtr3<Item> generateItem() {
+	AutoPtr3<Item> item(new Item);
+	return item;
+  }
+};
+
+class Lesson203 {
+public:
+  class Human {
+	string mName;
+	weak_ptr<Human> mPartner;
+
+  public:
+	Human(const string& name) : mName(name) {
+	  cout << mName << " created\n";
+	}
+
+	~Human() {
+	  cout << mName << " destroyed\n";
+	}
+
+	friend bool partnerUp(shared_ptr<Human>& h1, shared_ptr<Human>& h2) {
+	  if (!h1 || !h2) {
+		return false;
+	  }
+	  h1->mPartner = h2;
+	  h2->mPartner = h1;
+
+	  cout << h1->mName << " is now partnered with " << h2->mName << endl;
+	  return true;
+	}
+
+	const shared_ptr<Human> getPartner() const { return mPartner.lock(); }
+	const string& getName() const { return mName; }
+  };
+};
+
 
 int main() {
+  
+  auto anton = make_shared<Lesson203::Human>("Anton");
+  auto ivan = make_shared<Lesson203::Human>("Ivan");
+  partnerUp(anton, ivan);
+  auto partner = ivan->getPartner();
+  cout << ivan->getName() << "'s partner is: " << partner->getName() << endl;
 
-  try
-  {
-	Lesson195::B b(0);
-  }
-  catch (int)
-  {
-	cout << "Oooops!" << endl;
-  }
   return 0;
 
 }
