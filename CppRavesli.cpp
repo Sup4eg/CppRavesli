@@ -23,6 +23,7 @@
 #include <initializer_list>
 #include <cmath>
 #include <memory>
+#include <fstream>
 
 using namespace std;
 
@@ -1730,15 +1731,38 @@ public:
   };
 };
 
+class Lesson220 {
+public:
+  static void writeToFile() {
+	ofstream outf("SomeText.txt");
+	if (!outf) {
+	  cerr << "Uh, oh, couldn't open file for writing" << endl;
+	  exit(1);
+	}
+
+	outf << "See line #1!" << endl;
+	outf << "See line #2!" << endl;
+  }
+  static void readFromFile() {
+	ifstream inf("SomeText.txt");
+
+	if (!inf) {
+	  cerr << "Couldn't open!" << endl;
+	  exit(1);
+	}
+
+	while (inf) {
+	  string strInput;
+	  getline(inf, strInput);
+	  cout << strInput << endl;
+	}
+  }
+};
+
 
 int main() {
   
-  auto anton = make_shared<Lesson203::Human>("Anton");
-  auto ivan = make_shared<Lesson203::Human>("Ivan");
-  partnerUp(anton, ivan);
-  auto partner = ivan->getPartner();
-  cout << ivan->getName() << "'s partner is: " << partner->getName() << endl;
-
+  Lesson220::readFromFile();
   return 0;
 
 }
